@@ -1,0 +1,709 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: CoreSpaces
+  description: JackRabbit Application
+servers:
+  - url: /api/v1
+tags:
+  - name: Users
+  - name: Anonymous
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: apiKey
+      description: API key to authorize requests. If you don't have an CoreSpaces API key, use `fd4698c940c6d1da602a70ac34f0b147`.
+      name: Authorization
+      in: header
+  schemas:
+    UserExistsRequestBody:
+      type: object
+      title: user_exists_request_body
+      required:
+        - email
+      properties:
+        email:
+          type: string
+          example: chris.helsel@img.com.lcl
+    UserUpdateRequestBody:
+      type: object
+      title: user_update_request_body
+      properties:
+        preferredPaymentSource:
+          type: string
+        photo: 
+          type: string
+        pointsEarned: 
+          type: number
+        termsApprovedDate: 
+          type: string
+        paymentDue: 
+          type: boolean
+        paymentReceived: 
+          type: boolean
+        paymentOverdue: 
+          type: boolean
+        maintenanceRequestReceived: 
+          type: boolean
+        newMaintenanceActivity: 
+          type: boolean
+        autoPayIsEnabled:
+          type: boolean
+        autoPayDayOfMonth:
+          type: number
+        timezone:
+          type: string
+    UserLoginRequestBody:
+      type: object
+      title: user_login_request_body
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          example: chris.helsel@img.com.lcl
+        password:
+          type: string
+          example: '12345678'
+    UserSetPasswordRequestBody:
+      type: object
+      title: user_set_password_request_body
+      required:
+        - id
+        - password
+        - emailChallengeCode
+      properties:
+        id:
+          type: number
+          example: 3
+        password:
+          type: string
+          example: '12345678'
+        emailChallengeCode:
+          type: number
+          example: 123456
+    UserSetMyPasswordRequestBody:
+      type: object
+      title: user_set_password_request_body
+      required:
+        - id
+        - password
+        - oldPassword
+      properties:
+        id:
+          type: number
+          example: 3
+        password:
+          type: string
+          example: '12345678'
+        oldPassword:
+          type: string
+          example: '12345678'
+    UserSubmitLocationPointBody:
+      type: object
+      title: user_submit_location_point_body
+      required:
+        - latitude
+        - longitude
+      properties:
+        latitude:
+          type: number
+          example: 40.768128
+        longitude:
+          type: number
+          example: -73.982149
+    MaintenanceCreateRequestBody:
+      type: object
+      title: maintenance_create_request_body
+      required:
+        - permissionToEnter
+        - maintenanceLocationId
+        - maintenanceCategoryId
+        - maintenancePriorityId
+        - maintenanceProblemId
+        - problemDescription
+        - phoneNumber
+      properties:
+        permissionToEnter:
+          type: boolean
+          example: true
+        maintenanceLocationId:
+          type: number
+          example: 36729
+        phoneNumber:
+          type: number
+          example: 1140252034
+        maintenanceCategoryId:
+          type: number
+          example: 155627
+        maintenancePriorityId:
+          type: number
+          example: 18968
+        maintenanceProblemId:
+          type: number
+          example: 352777
+        problemDescription:
+          type: string
+          example: 'my cat destroyed the freezer'
+    UpdateEventRSVPRequestBody:
+      type: object
+      title: update_event_rsvp_request_body
+      required:
+        - eventId
+        - rsvp
+      properties:
+        eventId:
+          type: number
+          example: 3
+        rsvp:
+          type: boolean
+          example: true
+    UpdateUserBulletinRequestBody:
+      type: object
+      title: update_user_bulletin_request_body
+      required:
+        - bulletinId
+        - read
+      properties:
+        bulletinId:
+          type: number
+          example: 3
+        read:
+          type: boolean
+          example: true
+    SendRegistrationChallengeCodeBody:
+      type: object
+      title: user_send_challenge_code_body
+      required:
+        - id
+      properties:
+        id:
+          type: number
+          example: 3
+    CheckRegistrationChallengeCodeBody:
+      type: object
+      title: user_check_challenge_code_body
+      required:
+        - id
+        - challenge_code
+      properties:
+        id:
+          type: number
+          example: 3
+        challenge_code:
+          type: number
+          example: 123456
+    AutoPayBody:
+      type: object
+      title: auto_pay_body
+      required:
+        - set_autopay
+      properties:
+        stripe_source_id:
+          type: string
+          example: card_1EpyVBGFKYXJE4WzR8oY94K2
+        set_autopay:
+          type: boolean
+          example: true
+        set_autopay_day_of_month:
+          type: number
+          example: 2
+    CreditCardBody:
+      type: object
+      title: credit_card_body
+      required:
+        - source
+      properties:
+        source:
+          type: string
+          example: tok_amex
+        set_default:
+          type: boolean
+          example: true
+    BankAccountBody:
+      type: object
+      title: bank_account_body
+      required:
+        - source
+      properties:
+        source:
+          type: string
+          example: btok_us_verified
+        set_default:
+          type: boolean
+          example: true
+    FullBalancePaymentBody:
+      type: object
+      title: tenant_full_balance_payment_body
+      required:
+        - stripe_source_id
+      properties:
+        stripe_source_id:
+          type: string
+          example: card_1EpyVBGFKYXJE4WzR8oY94K2
+    VerifyBankAccountBody:
+      type: object
+      title: verify_bank_account_body
+      required:
+        - stripe_source_id
+        - deposit_one
+        - deposit_two
+      properties:
+        stripe_source_id:
+          type: string
+          example: card_1EpyVBGFKYXJE4WzR8oY94K2
+        deposit_one:
+          type: number
+          example: 42
+        deposit_two:
+          type: number
+          example: 68
+paths:
+  /users/events:
+    get:
+      tags:
+        - Events
+      responses:
+        200:
+          description: Retrieves events available to the authenticated Resident.
+      security:
+        - BearerAuth: []
+  /users/events/rsvp:
+    patch:
+      tags:
+        - Events
+      responses:
+        200:
+          description: Updates an RSVP for the authenticated Resident.
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEventRSVPRequestBody'
+  /users/bulletins:
+    get:
+      tags:
+        - Bulletins
+      responses:
+        200:
+          description: Retrieves news bulletins sent to the authenticated Resident.
+      security:
+        - BearerAuth: []
+  /users/read-bulletin/{bulletinId}:
+    patch:
+      description: Shows that the proccess seccedded.
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: Updates a bulletin for the authenticated Resident.
+      parameters:
+        - in: path
+          name: bulletinId
+          schema:
+            type: integer
+          required: true
+  #/users/update-bulletin:
+  #  patch:
+  #    tags:
+  #      - Bulletins
+  #    responses:
+  #      200:
+  #        description: Updates a bulletin for the authenticated Resident.
+  #    security:
+  #      - BearerAuth: []
+  #    requestBody:
+  #      description: an example
+  #      required: true
+  #      content:
+  #        application/json:
+  #          schema:
+  #            $ref: '#/components/schemas/UpdateUserBulletinRequestBody'
+  /users/send-registration-challenge-code:
+    post:
+      tags:
+        - Users
+      description: Emails a temporary code to a new user's Entrata email address to verify email address ownership
+      responses:
+        201:
+          description: An email with the challenge token has been sent to the Resident's related Entrata email address.
+          content: {}
+        404:
+          description: Resident not found.
+          content: {}
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendRegistrationChallengeCodeBody'
+  /users/check-registration-challenge-code:
+    post:
+      tags:
+        - Users
+      description: Emails a temporary code to a new user's Entrata email address to verify email address ownership
+      responses:
+        200:
+          description: The challenge code matched and the user account is now active.
+        403:
+          description: The challenge code did not match or was expired and the user account is not active.
+        404:
+          description: Resident not found.
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckRegistrationChallengeCodeBody'
+  /users/set-auto-pay:
+    post:
+      tags:
+        - Stripe
+      responses:
+        200:
+          description: Recurring payments ("Auto-pay") was successfully setup.
+        404:
+          description: Resident not found.
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutoPayBody'
+  /users/credit-card:
+    post:
+      tags:
+        - Stripe
+      responses:
+        201:
+          description: The new credit card was successfully added.
+        404:
+          description: Resident not found.
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditCardBody'
+  /users/bank-account:
+    post:
+      tags:
+        - Stripe
+      responses:
+        201:
+          description: The new bank account was successfully added.
+        404:
+          description: Resident not found.
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BankAccountBody'
+  /users/verify-bank-account:
+    post:
+      tags:
+        - Stripe
+      responses:
+        200:
+          description: The bank account was successfully verified.
+        404:
+          description: Resident not found.
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyBankAccountBody'
+  /users/get-payment-sources:
+    get:
+      tags:
+        - Stripe
+      responses:
+        200:
+          description: Retrieves all available Stripe payment sources.
+        404:
+          description: Resident not found.
+      security:
+        - BearerAuth: []
+  /users/get-tenant-balance:
+    get:
+      tags:
+        - Entrata
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: Retrieves Entrata ledger balance less any pending payments.
+        404:
+          description: Resident not found.
+  /users/pay-tenant-balance:
+    post:
+      tags:
+        - Stripe
+      responses:
+        200:
+          description: Makes tenant payment via Stripe.
+        404:
+          description: Resident not found.
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FullBalancePaymentBody'
+  /users/submit-location-point:
+    post:
+      tags:
+        - GIS
+      responses:
+        200:
+          description: Saves GIS location point to database.
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSubmitLocationPointBody'
+  /users/exists:
+    post:
+      tags:
+        - Users
+      description: Tries to find a user on the DB and the Entrata API by email, returns the { id } or null
+      responses:
+        200:
+          description: Returns { id, hasPassword } or null at the response property
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - id
+                  - hasPassword
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                    description: "the desired user's id"
+                  hasPassword:
+                    type: boolean
+                    example: false
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserExistsRequestBody"
+  /users/me:
+    get:
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: Returns a User
+  /users/setPassword:
+    post:
+      tags:
+        - Users
+      description: Tries to find a user on the DB and set its password
+      responses:
+        200:
+          description: Returns a User
+          content: {}
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSetPasswordRequestBody'
+  /users/set-my-password:
+    post:
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      description: Tries to find a user on the DB and set its password
+      responses:
+        200:
+          description: Returns a User
+          content: {}
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSetMyPasswordRequestBody'
+  /payments/history/{entrataPropertyId}:
+    get:
+      tags:
+        - Payments
+      security:
+        - BearerAuth: []
+      description: payments made by the user
+      responses:
+        200:
+          description: return all payments made by the user for a given property as an array of objects
+      parameters:
+        - in: path
+          name: entrataPropertyId
+          schema:
+            type: integer
+          required: true
+  /maintenance/info/{entrataPropertyId}:
+    get:
+      tags:
+        - Maintenance
+      description: info to consume maintenance service
+      responses:
+        200:
+          description: Returns a parameters for consuming maintenance service
+      parameters:
+        - in: path
+          name: entrataPropertyId
+          schema:
+            type: integer
+          required: true
+  /maintenance/create/{entrataPropertyId}:
+    post:
+      tags:
+        - Maintenance
+      security:
+        - BearerAuth: []
+      description: creates a maintenance request
+      responses:
+        200:
+          description: Returns a parameters for consuming maintenance service
+      parameters:
+        - in: path
+          name: entrataPropertyId
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaintenanceCreateRequestBody'
+  /maintenance/list/{entrataPropertyId}:
+    get:
+      tags:
+        - Maintenance
+      security:
+        - BearerAuth: []
+      description: lists all maintenance requests fro the logged user
+      responses:
+        200:
+          description: Returns a parameters for consuming maintenance service
+      parameters:
+        - in: path
+          name: entrataPropertyId
+          schema:
+            type: integer
+          required: true
+  /users/{userId}:
+    put:
+      tags:
+        - Users
+      security:
+        - BearerAuth: []
+      description: Tries to find a user on the DB and modify it attrs
+      responses:
+        200:
+          description: Returns a User
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequestBody'
+  /login:
+    post:
+      tags:
+        - Anonymous
+      description: Logs a user into the system
+      responses:
+        200:
+          description: Returns a User
+      requestBody:
+        description: an example
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequestBody'
+  /leases/details/{entrataPropertyId}:
+    get:
+      tags:
+        - Leases
+      security:
+        - BearerAuth: []
+      description: details about the current lease of the user given a entrataPropertyId
+      responses:
+        200:
+          description: returns a single object
+      parameters:
+        - in: path
+          name: entrataPropertyId
+          schema:
+            type: integer
+          required: true
+  /leases/documents/{entrataPropertyId}:
+    get:
+      tags:
+        - Leases
+      security:
+        - BearerAuth: []
+      description: get all documents related to the current user's lease given a entrataPropertyId with their info
+      responses:
+        200:
+          description: returns an array, where you'll find some info about the document, and the document itself as Base64 String
+      parameters:
+        - in: path
+          name: entrataPropertyId
+          schema:
+            type: integer
+          required: true
+  /leases/documents/download/{leaseDocumentId}:
+    get:
+      tags:
+        - Leases
+      security:
+        - BearerAuth: []
+      description: returns a JSON with the document data inside given the document's id
+      responses:
+        200:
+          description: returns a JSON with the document fileData as Base64
+      parameters:
+        - in: path
+          name: leaseDocumentId
+          schema:
+            type: integer
+          required: true

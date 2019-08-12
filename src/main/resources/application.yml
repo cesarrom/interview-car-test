@@ -1,0 +1,27 @@
+server:
+  port: 9091
+  servlet:
+    context-path: /
+spring:
+  application:
+    name: car-test
+  data:
+    rest:
+      basePath: /
+  datasource:
+    initialization-mode: always
+    name: postgres
+    password: cesarrom26$
+    platform: postgres
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:car-test}
+    username: cesarrom
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+          
