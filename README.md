@@ -38,4 +38,4 @@ The solution was made by using:
 
 You can run the project just by using ` ./mvnw clean install ` & ` ./mvnw spring-boot:run `, but it is ready to be used on a docker-based architecture
 
-Once the project is up and running you can go to the path ` /swagger-ui.html ` in order to see and use all the available enpoints
+Once the project is up and running you can go to the path ` /swagger-ui.html ` in order to see and use all the available enpoints (default local port 9091)

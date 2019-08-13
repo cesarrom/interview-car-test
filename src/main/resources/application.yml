@@ -11,13 +11,13 @@ spring:
   datasource:
     initialization-mode: always
     name: ${POSTGRES_DB:car-test}
-    password: ${POSTGRES_PASSWORD:postgres}
+    password: ${POSTGRES_PASSWORD:cesarrom26$}
     platform: postgres
     url: jdbc:postgresql://${DB_URI:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:car-test}
-    username: ${POSTGRES_USER:postgres}
+    username: ${POSTGRES_USER:cesarrom}
   jpa:
     hibernate:
-      ddl-auto: ${POSTGRES_INIT_TYPE:none}
+      ddl-auto: ${POSTGRES_INIT_TYPE:create-drop}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
