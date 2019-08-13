@@ -10,14 +10,14 @@ spring:
       basePath: /
   datasource:
     initialization-mode: always
-    name: postgres
-    password: cesarrom26$
+    name: ${POSTGRES_DB:car-test}
+    password: ${POSTGRES_PASSWORD:postgres}
     platform: postgres
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:car-test}
-    username: cesarrom
+    url: jdbc:postgresql://${DB_URI:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:car-test}
+    username: ${POSTGRES_USER:postgres}
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: ${POSTGRES_INIT_TYPE:none}
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect

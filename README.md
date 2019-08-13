@@ -30,7 +30,8 @@ The solution was made by using:
 - Spring boot 2
 - JPA
 - Hibernate
-- PostgreSQL
+- PostgreSQL:
+	- una base de datos llamada car-test, pero se puede manejar a nivel de variables de entorno en el archivo docker-compose
 - Docker & Docker compose
 - Bash
 

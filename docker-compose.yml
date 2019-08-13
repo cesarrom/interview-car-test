@@ -6,6 +6,14 @@ services:
       - "9091:9091"
     links:
       - postgres-db:postgres-db
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: car-test
+      POSTGRES_PORT: 5432
+      POSTGRES_URI: postgres-db
+      POSTGRES_INIT_TYPE: update
+      #possibilities -> auto, create-drop, create, update, none
   postgres-db:
     image: postgres:9.6-alpine
     ports:
