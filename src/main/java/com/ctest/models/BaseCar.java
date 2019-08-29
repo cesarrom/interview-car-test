@@ -36,6 +36,7 @@ public class BaseCar extends CommonModel implements Serializable {
 
 
 	public BaseCar() {
+
 	}
 
 	public Long getId() {
